@@ -10,7 +10,7 @@ const resolvers = {
       client.query({
         query: getPokemon,
         variables: { id },
-      })
+      }),
   },
 
   Mutation: {

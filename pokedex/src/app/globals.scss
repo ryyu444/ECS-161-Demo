@@ -1,0 +1,36 @@
+:root {
+  // font colors
+  --font-primary: #333;
+  --font-secondary: #666;
+
+  // background colors
+  --background-primary: #f5f5f5;
+  --background-secondary: #fff;
+
+  // light gray background color
+  --background-light: #f9f9f9;
+
+  // pokemon move selection green
+  --color-green: #78c850;
+
+  // brown border color
+  --color-brown: #a8a878;
+  --color-light-purple: #c6b9dc;
+
+  // pokemon red and blue
+  --color-red: #ff0000;
+  --color-blue: #0055a4;
+
+  background-color: var(--background-primary);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--font-primary);
+}
+
+button {
+  cursor: pointer;
+}

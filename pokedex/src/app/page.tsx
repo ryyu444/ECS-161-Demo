@@ -1,95 +1,113 @@
+"use client";
+
 import Image from "next/image";
-import styles from "./page.module.css";
+import { useRef, useState, useEffect } from "react";
+import typeColors from "@/app/data/types.json";
+import styles from "./page.module.scss";
+
+async function fetchPokemon(name: string | undefined) {
+  // graphql query
+  // const res = await fetch(`/pokeapi-graphql?name=${name}`);
+
+  // rest api call
+  const res = await fetch(`/pokeapi-rest?name=${name}`);
+
+  // convert to json
+  const data = await res.json();
+
+  // error checking
+  if (!data.ok) {
+    return null;
+  }
+
+  // return retrieved pokemon
+  return data.data.pokemon[0];
+}
 
 export default function Home() {
+  const [pokemon, setPokemon] = useState<any>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  // initial fetch of a pokemon
+  useEffect(() => {
+    fetchPokemon("ditto").then((data) => setPokemon(data));
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    // get pokemon name from input
+    const name = nameRef.current?.value.toLowerCase();
+
+    // get pokemon data
+    const data = await fetchPokemon(name);
+
+    // set pokemon data
+    if (data) {
+      setPokemon(data);
+    }
+  }
+
+  // console.log(pokemon);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
+    <main className={styles.home}>
+      <section className={styles.card}>
+        <h1>Budget Pokedex</h1>
+        <div className={styles.cardTop}>
+          <div className={styles.pokeHeader}>
+            <div className={styles.pokeName}>{pokemon?.name}</div>
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+              src={pokemon?.sprite[0].sprites}
+              className={styles.pokeImg}
+              width={250}
+              height={250}
+              alt={"Pokemon Image"}
             />
-          </a>
+          </div>
+
+          <ul className={styles.pokeTypes}>
+            {pokemon?.types?.map((type: any) => (
+              <li
+                key={type.type.name}
+                style={{
+                  backgroundColor: typeColors[type.type.name],
+                  padding: "8px",
+                  borderRadius: "4px",
+                  color: "white",
+                  fontSize: "1.2rem",
+                  minWidth: "50px",
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                }}
+              >
+                {type.type.name}
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+        <div className={styles.cardBottom}>
+          <ul className={styles.pokeAbilities}>
+            {pokemon?.abilities?.map((ability: any) => (
+              <li key={ability.ability.name} className={styles.pokeAbility}>
+                {ability.ability.name}
+              </li>
+            ))}
+          </ul>
+          <div className={styles.pokeStats}>
+            <p>Height: {pokemon?.height}m</p>
+            <p>Weight: {pokemon?.weight}lb</p>
+          </div>
+        </div>
+      </section>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formInput}>
+          <label htmlFor="name">Pokemon</label>
+          <input type="text" placeholder="i.e Pikachu" ref={nameRef} />
+        </div>
+        <button type="submit">Search</button>
+      </form>
     </main>
   );
 }
