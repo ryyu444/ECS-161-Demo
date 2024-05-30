@@ -7,5 +7,7 @@ GraphQL is a query language for APIs and a runtime for executing those queries b
 
 Key Differences:
   Flexibility: GraphQL allows clients to request exactly the data they need, while REST APIs have fixed endpoints that return fixed data structures.
+  
   Performance: GraphQL can reduce the number of network requests by allowing multiple resource queries in a single request, whereas REST might require multiple requests.
+  
   Versioning: With REST, versioning is typically handled via different endpoint URLs (e.g., /v1/items, /v2/items). In GraphQL, versioning is less of an issue because the client specifies exactly what data it needs
