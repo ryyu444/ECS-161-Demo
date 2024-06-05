@@ -1,11 +1,22 @@
-# ECS-161-Demo
-Postman: https://www.postman.com/downloads/
-Tutorial on how to make RESTful vs. GraphQL API calls
+
+
+---
+
+## ECS-161-Demo
+### Postman: https://www.postman.com/downloads/
+### Tutorial on how to make RESTful vs. GraphQL API calls
+
+
 
 REST (Representational State Transfer) is an architectural style for designing networked applications. It relies on a stateless, client-server, cacheable communications protocol -- the HTTP protocol. RESTful applications use HTTP requests to perform CRUD (Create, Read, Update, Delete) operations.
 
-Install express: npm install express
-Create basic server: 
+
+Install express: npm install express.
+
+## Create basic server:
+
+
+``` js
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -57,10 +68,14 @@ app.delete('/users/:id', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
-
+```
 GraphQL is a query language for APIs and a runtime for executing those queries by using a type system you define for your data. Unlike REST, GraphQL allows clients to request exactly the data they need, making it more efficient in terms of bandwidth usage.
 Install dependencies: npm install express apollo-server-express graphql
-create basic GraphQL server: 
+
+## create basic GraphQL server: 
+
+
+``` js
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 
@@ -123,7 +138,7 @@ server.applyMiddleware({ app });
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}${server.graphqlPath}`);
 });
-
+```
 Key Differences:
   Flexibility: GraphQL allows clients to request exactly the data they need, while REST APIs have fixed endpoints that return fixed data structures.
   
